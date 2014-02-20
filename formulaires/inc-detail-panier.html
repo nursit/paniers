@@ -1,0 +1,47 @@
+#CACHE{0}
+<BOUCLE_panier(paniers){id_panier}>
+	#SET{items,#COOKIE_PANIER|paniers_explique_cookie}
+	<table class="spip panier">
+		<thead>
+		<th class="site">Site</th>
+		<th class="produit">Produit</th>
+		<th class="action"></th>
+		<th class="prix">Prix</th>
+		</thead>
+		<tbody>
+	<BOUCLE_detail(POUR){tableau #GET{items}}>
+	<tr class="[(#COMPTEUR_BOUCLE|alterner{odd,even})]">
+		<td class="site">[(#INFO_URL_SITE{site,#VALEUR{id_syndic}})]</td>
+		<td class="produit">[(#VALEUR{id}|affiche_produit_clair{#VALEUR{quantity},#VALEUR{id_syndic},#INFO_DATE_ECHEANCE{site,#VALEUR{id_syndic}}})]</td>
+		<td class="action">
+			[(#VALEUR{id}|match{'^((switch|rembt)mois|credit|suppressionsite|reducauto)'}|non|ou{#VALEUR{id}|=={credit}|et{#VALEUR{net_price}|>{0}}})
+				[(#BOUTON_ACTION{[(#CHEMIN_IMAGE{panier-remove-16.png}|balise_img{<:paniers:info_retirer_panier:>})],[(#URL_ACTION_AUTEUR{retirer_item_panier,[(#ID_PANIER)-[(#VALEUR{id})]-[(#VALEUR{id_syndic})]],#SELF})],ajax,'',<:paniers:info_retirer_panier:>})]
+			]
+		</td>
+		<td class="prix">[(#VALEUR{net_price}|?{[(#VALEUR{net_price}|affiche_monnaie)],Gratuit})]</td>
+		[(#VAL{hebergement}|in_array{#VALEUR{id}|produit_info|table_valeur{category}}|oui)#SET{affichetarif,' '}]
+	</tr>
+	</BOUCLE_detail>
+		</tbody>
+		<tfoot>
+		<tr>
+			<td class="site" colspan="3">Total HT</td>
+			<td class="prix">[(#GET{items}|paniers_calcul_total|reset|affiche_monnaie)]</td>
+		</tr>
+		<tr>
+			<td class="site"  colspan="3">Total TTC</td>
+			<td class="prix">[(#GET{items}|paniers_calcul_total|end|affiche_monnaie)]</td>
+		</tr>
+		</tfoot>
+	</table>
+	<div class="post-infos formulaire_spip" style="margin-bottom: 0;padding-bottom: 0;overflow:hidden;">
+		<a class="right small" href="#URL_ACTION_AUTEUR{abandonner_panier,#ID_PANIER,#ENV{_url_cancel}}">Abandonner cette commande</a>
+		[(#GET{affichetarif}|oui)
+		[<h6>Votre tarif</h6>
+		<small>
+		(#ID_AUTEUR|client_affiche_info_tarif)
+		</small>
+		]
+		]
+	</div>
+</BOUCLE_panier>

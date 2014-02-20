@@ -1,0 +1,17 @@
+<paquet
+	prefix="paniers"
+	categorie="outil"
+	version="0.3.3"
+	etat="test"
+	compatibilite="];["
+	logo="prive/themes/spip/images/panier-32.png"
+	schema="0.1.7"
+>	
+
+	<nom>Paniers</nom>
+
+	<pipeline nom="declarer_tables_principales" inclure="paniers_administrations.php" />
+	<pipeline nom="bank_traiter_reglement" inclure="paniers_pipelines.php" />
+	<pipeline nom="paniers_actualise_contenu" action="" />
+
+</paquet>

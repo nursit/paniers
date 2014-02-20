@@ -1,0 +1,31 @@
+#CACHE{0}
+<INCLURE{fond=formulaires/inc-detail-panier,env} />
+
+<div class="formulaire_spip formulaire_#FORM formulaire_#FORM-#ENV{id,nouveau}">
+	[<div class="reponse_formulaire reponse_formulaire_ok">(#ENV*{message_ok})</div>]
+	[<div class="reponse_formulaire reponse_formulaire_erreur">(#ENV*{message_erreur})</div>]
+	<form method='post' action='#ENV{action}'><div>
+		[(#REM) declarer les hidden qui declencheront le service du formulaire
+		parametre : url d'action ]
+		#ACTION_FORMULAIRE{#ENV{action}}
+
+		<ul>
+		#SET{name,contrats}#SET{obli,''}#SET{erreurs,#ENV**{erreurs}|table_valeur{#GET{name}}}
+		<li class="editer pleine_largeur editer_[(#GET{name})][ (#GET{obli})][ (#GET{erreurs}|oui)erreur]">
+			<label><:paniers:label_accepter_contrats:></label>[
+			<span class='erreur_message'>(#GET{erreurs})</span>
+			]
+			#SET{val,cgv}
+			<div class="choix">
+				<input type="checkbox" name="#GET{name}#EVAL{chr(91)}#EVAL{chr(93)}" class="checkbox" id="#GET{name}_#GET{val}" value="#GET{val}"[(#GET{val}|in_any{#ENV{#GET{name}}}|oui)checked="checked"] />
+				<label for="#GET{name}_#GET{val}">Conditions générales d'utilisation (<a href="#URL_ARTICLE{2}" target="blank">lire</a>)</label>
+			</div>
+		</li>
+		</ul>
+
+		[(#REM) ajouter les saisies supplementaires : extra et autre, a cet endroit ]
+		<!--extra-->
+		<p class='boutons'><span class='image_loading'>&nbsp;</span>
+			<input type='submit' class='submit' value='<:nursit:bouton_valider|attribut_html:>' /></p>
+	</div></form>
+</div>
